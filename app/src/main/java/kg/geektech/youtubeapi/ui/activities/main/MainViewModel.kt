@@ -22,7 +22,6 @@ class MainViewModel : BaseViewModel() {
 
     private fun getPlaylists(pageToken: String?): LiveData<Playlist> {
         val data = MutableLiveData<Playlist>()
-
         apiService.getPlaylists(
             Constants.PART,
             Constants.CHANNEL_ID,

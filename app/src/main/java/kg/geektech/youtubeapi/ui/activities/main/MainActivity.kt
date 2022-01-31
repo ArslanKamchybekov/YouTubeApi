@@ -17,7 +17,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(),
     PlaylistAdapter.OnItemClick {
 
 
-    override fun init() {
+    override fun initViews() {
         connectionCheck()
     }
 

@@ -19,12 +19,12 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
 
         checkInternet()
         initViewModel()
-        init()
+        initViews()
         initListener()
 
     }
 
-    open fun init() {}
+    open fun initViews() {}
     open fun initListener() {}
     open fun checkInternet() {}
     open fun initViewModel() {}
