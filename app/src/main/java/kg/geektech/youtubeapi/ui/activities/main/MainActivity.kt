@@ -37,6 +37,8 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(),
                 override fun onLost(network: Network) {
                     runOnUiThread {
                         binding.rvPlaylists.visibility = View.GONE
+                        binding.toolbar.visibility = View.GONE
+                        binding.viewSupporter.visibility = View.GONE
                         binding.include.root.visibility = View.VISIBLE
                     }
                 }

@@ -1,4 +1,8 @@
 <resources>
-    <string name="app_name">YouTube Api</string>
+    <string name="app_name">YouTube Player</string>
     <string name="try_again">Try again</string>
+    <string name="youtube">YouTube</string>
+    <string name="player">Player</string>
+    <string name="playlist">Playlist</string>
+    <string name="back">Back</string>
 </resources>

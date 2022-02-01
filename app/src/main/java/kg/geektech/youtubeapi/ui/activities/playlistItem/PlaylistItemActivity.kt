@@ -28,4 +28,11 @@ class PlaylistItemActivity :
             }
         }
     }
+
+    override fun initListener() {
+        super.initListener()
+        binding.ivBack.setOnClickListener {
+            onBackPressed()
+        }
+    }
 }

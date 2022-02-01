@@ -47,7 +47,7 @@ class PlaylistAdapter :
         fun onBind(item: Item) {
             binding.ivPlaylist.load(item.snippet.thumbnails.high.url)
             binding.tvTitle.text = item.snippet.localized.title
-            val videoCount = item.contentDetails.itemCount.toString()
+            val videoCount = item.contentDetails.itemCount.toString() + " videos"
             binding.tvAmount.text = videoCount
             binding.tvPlaylist.text = item.kind
             itemView.setOnClickListener {
