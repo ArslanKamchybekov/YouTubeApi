@@ -1,4 +1,4 @@
-package kg.geektech.youtubeapi.ui.activities.main
+package kg.geektech.youtubeapi.ui.activities.playlist
 
 import android.content.Intent
 import android.net.ConnectivityManager
@@ -7,17 +7,30 @@ import android.net.NetworkRequest
 import android.view.LayoutInflater
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import kg.geektech.youtubeapi.base.BaseActivity
+import kg.geektech.youtubeapi.core.base.BaseActivity
 import kg.geektech.youtubeapi.data.model.Item
-import kg.geektech.youtubeapi.databinding.ActivityMainBinding
+import kg.geektech.youtubeapi.databinding.ActivityPlaylistBinding
 import kg.geektech.youtubeapi.ui.activities.playlistItem.PlaylistItemActivity
 import kg.geektech.youtubeapi.utilities.Constants
 
-class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(),
+class PlaylistActivity : BaseActivity<PlaylistViewModel, ActivityPlaylistBinding>(),
     PlaylistAdapter.OnItemClick {
 
+    override val viewModel: PlaylistViewModel by lazy {
+        ViewModelProvider(this)[PlaylistViewModel::class.java]
+    }
+    private val adapter: PlaylistAdapter by lazy {
+        PlaylistAdapter(this)
+    }
+
+    private fun initRecyclerView() {
+        binding.rvPlaylists.apply {
+            adapter = this@PlaylistActivity.adapter
+        }
+    }
 
     override fun initViews() {
+        initRecyclerView()
         connectionCheck()
     }
 
@@ -47,33 +60,27 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(),
     }
 
     private fun getInfo() {
-        val adapter = PlaylistAdapter()
-        adapter.setOnItemClick(this)
-        binding.rvPlaylists.adapter = adapter
-        viewModel.playlist(null).observe(this) {
-            if (it != null) {
-                adapter.setList(it.items)
-            }
+        viewModel.getPlaylists(null).observe(this) {
+            it.items?.let { it1 -> adapter.setList(it1) }
         }
     }
 
     override fun onClick(item: Item) {
-        val intent = Intent(this, PlaylistItemActivity::class.java)
-        intent.putExtra(Constants.KEY_PLAYLIST_ID, item.id)
-        startActivity(intent)
+        Intent(this, PlaylistItemActivity::class.java).apply {
+            putExtra(Constants.KEY_PLAYLIST_ID, item.id)
+            putExtra(Constants.KEY_PLAYLIST_TITLE, item.snippet?.title)
+            putExtra(Constants.KEY_PLAYLIST_DESC, item.snippet?.description)
+            startActivity(this)
+        }
     }
 
-    override fun inflateViewBinding(inflater: LayoutInflater): ActivityMainBinding {
-        return ActivityMainBinding.inflate(layoutInflater)
+    override fun inflateViewBinding(inflater: LayoutInflater): ActivityPlaylistBinding {
+        return ActivityPlaylistBinding.inflate(layoutInflater)
     }
 
     override fun initListener() {
         binding.include.btnTryAgain.setOnClickListener {
             connectionCheck()
         }
-    }
-
-    override val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this)[MainViewModel::class.java]
     }
 }

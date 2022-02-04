@@ -1,13 +1,14 @@
-package kg.geektech.youtubeapi.data.remote
+package kg.geektech.youtubeapi.core.network
 
 import kg.geektech.youtubeapi.BuildConfig.BASE_URL
+import kg.geektech.youtubeapi.data.remote.ApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class RetrofitClient {
+class RetrofitApiClient {
 
     companion object {
         fun create(): ApiService {

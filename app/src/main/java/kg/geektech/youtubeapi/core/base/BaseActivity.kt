@@ -1,4 +1,4 @@
-package kg.geektech.youtubeapi.base
+package kg.geektech.youtubeapi.core.base
 
 import android.os.Bundle
 import android.view.LayoutInflater

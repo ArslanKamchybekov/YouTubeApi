@@ -1,4 +1,4 @@
-package kg.geektech.youtubeapi.extensions
+package kg.geektech.youtubeapi.core.extensions
 
 import android.widget.ImageView
 import com.bumptech.glide.Glide

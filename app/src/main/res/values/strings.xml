@@ -5,4 +5,5 @@
     <string name="player">Player</string>
     <string name="playlist">Playlist</string>
     <string name="back">Back</string>
+    <string name="published_at">Published at :</string>
 </resources>

@@ -1,18 +1,16 @@
-package kg.geektech.youtubeapi.ui.activities.main
+package kg.geektech.youtubeapi.ui.activities.playlist
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import kg.geektech.youtubeapi.core.extensions.load
 import kg.geektech.youtubeapi.data.model.Item
 import kg.geektech.youtubeapi.databinding.ItemPlaylistBinding
-import kg.geektech.youtubeapi.extensions.load
 
-class PlaylistAdapter :
-    RecyclerView.Adapter<PlaylistAdapter.MainViewHolder>() {
+class PlaylistAdapter(private val onItemClick: OnItemClick?) :
+RecyclerView.Adapter<PlaylistAdapter.MainViewHolder>() {
 
     private var list = arrayListOf<Item>()
-    private lateinit var onItemClick: OnItemClick
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -31,27 +29,25 @@ class PlaylistAdapter :
         return list.size
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun setList(list: List<Item>) {
+        this.list.clear()
         this.list.addAll(list)
-        notifyDataSetChanged()
-    }
-
-    fun setOnItemClick(onItemClick: OnItemClick) {
-        this.onItemClick = onItemClick
+        list.forEachIndexed { index, _ ->
+            notifyItemChanged(index)
+        }
     }
 
     inner class MainViewHolder(private val binding: ItemPlaylistBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: Item) {
-            binding.ivPlaylist.load(item.snippet.thumbnails.high.url)
-            binding.tvTitle.text = item.snippet.localized.title
-            val videoCount = item.contentDetails.itemCount.toString() + " videos"
+            item.snippet?.thumbnails?.high?.url?.let { binding.ivPlaylist.load(it) }
+            binding.tvTitle.text = item.snippet?.localized?.title
+            val videoCount = item.contentDetails?.itemCount.toString() + " video series"
             binding.tvAmount.text = videoCount
-            binding.tvPlaylist.text = item.kind
+
             itemView.setOnClickListener {
-                onItemClick.onClick(item)
+                onItemClick?.onClick(item)
             }
         }
     }
