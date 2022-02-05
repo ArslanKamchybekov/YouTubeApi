@@ -30,7 +30,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    buildFeatures{
+    buildFeatures {
         viewBinding true
     }
 }
@@ -60,4 +60,15 @@ dependencies {
 
     //Interceptor
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+
+    // Architecture Components
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
+    implementation 'androidx.core:core-ktx:1.8.0-alpha03'
+
+    //ExoPlayer
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.16.1'
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.16.1'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.16.1'
 }

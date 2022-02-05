@@ -6,4 +6,7 @@
     <string name="playlist">Playlist</string>
     <string name="back">Back</string>
     <string name="published_at">Published at :</string>
+    <string name="video">Video</string>
+    <string name="download">Download</string>
+    <string name="media_url_mp4">https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4</string>
 </resources>

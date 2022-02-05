@@ -6,8 +6,11 @@ import android.net.Network
 import android.net.NetworkRequest
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import kg.geektech.youtubeapi.core.base.BaseActivity
+import kg.geektech.youtubeapi.core.network.Status
 import kg.geektech.youtubeapi.data.model.Item
 import kg.geektech.youtubeapi.databinding.ActivityPlaylistBinding
 import kg.geektech.youtubeapi.ui.activities.playlistItem.PlaylistItemActivity
@@ -43,6 +46,8 @@ class PlaylistActivity : BaseActivity<PlaylistViewModel, ActivityPlaylistBinding
                     runOnUiThread {
                         binding.include.root.visibility = View.GONE
                         binding.rvPlaylists.visibility = View.VISIBLE
+                        binding.toolbar.visibility = View.VISIBLE
+                        binding.viewSupporter.visibility = View.VISIBLE
                         getInfo()
                     }
                 }
@@ -60,8 +65,24 @@ class PlaylistActivity : BaseActivity<PlaylistViewModel, ActivityPlaylistBinding
     }
 
     private fun getInfo() {
+        viewModel.loading.observe(this) {
+            binding.progressBar.isVisible = it
+        }
+
         viewModel.getPlaylists(null).observe(this) {
-            it.items?.let { it1 -> adapter.setList(it1) }
+            when (it.status) {
+                Status.SUCCESS -> {
+                    it?.data?.items?.let { it1 -> adapter.setList(it1) }
+                    viewModel.loading.postValue(false)
+                }
+                Status.ERROR -> {
+                    Toast.makeText(baseContext, it.message.toString(), Toast.LENGTH_SHORT).show()
+                    viewModel.loading.postValue(false)
+                }
+                Status.LOADING -> {
+                    viewModel.loading.postValue(true)
+                }
+            }
         }
     }
 
@@ -82,5 +103,10 @@ class PlaylistActivity : BaseActivity<PlaylistViewModel, ActivityPlaylistBinding
         binding.include.btnTryAgain.setOnClickListener {
             connectionCheck()
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        connectionCheck()
     }
 }

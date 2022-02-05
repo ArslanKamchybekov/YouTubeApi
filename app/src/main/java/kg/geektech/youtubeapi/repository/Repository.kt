@@ -1,65 +1,46 @@
 package kg.geektech.youtubeapi.repository
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import kg.geektech.App.Companion.apiService
 import kg.geektech.youtubeapi.BuildConfig
+import kg.geektech.youtubeapi.core.network.Resource
 import kg.geektech.youtubeapi.data.model.Playlist
 import kg.geektech.youtubeapi.utilities.Constants
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.Dispatchers
 
 class Repository {
 
-    fun getPlaylists(pageToken: String?): LiveData<Playlist> {
-        val data = MutableLiveData<Playlist>()
-
-        apiService.getPlaylists(
+    fun getPlaylists(pageToken: String?): LiveData<Resource<Playlist?>> = liveData(Dispatchers.IO) {
+        emit(Resource.loading())
+        val response = apiService.getPlaylists(
             Constants.PART,
             Constants.CHANNEL_ID,
             BuildConfig.API_KEY,
             Constants.MAX_RESULTS,
             pageToken
-        ).enqueue(object : Callback<Playlist> {
-            override fun onResponse(
-                call: Call<Playlist>,
-                response: Response<Playlist>
-            ) {
-                if (response.isSuccessful) {
-                    data.value = response.body()
-                }
-            }
-
-            override fun onFailure(call: Call<Playlist>, t: Throwable) {
-            }
-        })
-
-        return data
+        )
+        if (response.isSuccessful) {
+            emit(Resource.success(response.body()))
+        } else {
+            emit(Resource.error(response.message(), response.body(), response.code()))
+        }
     }
 
-    fun getItemPlaylists(playlistId: String, pageToken: String?): LiveData<Playlist> {
-        val data = MutableLiveData<Playlist>()
-
-        apiService.getDetailPlaylists(
-            Constants.PART,
-            playlistId,
-            BuildConfig.API_KEY,
-            Constants.MAX_RESULTS,
-            pageToken
-        ).enqueue(object : Callback<Playlist> {
-            override fun onResponse(
-                call: Call<Playlist>,
-                response: Response<Playlist>
-            ) {
-                if (response.isSuccessful) {
-                    data.value = response.body()
-                }
+    fun getItemPlaylists(playlistId: String, pageToken: String?): LiveData<Resource<Playlist?>> =
+        liveData(Dispatchers.IO) {
+            emit(Resource.loading())
+            val response = apiService.getItemPlaylists(
+                Constants.PART,
+                playlistId,
+                BuildConfig.API_KEY,
+                Constants.MAX_RESULTS,
+                pageToken
+            )
+            if (response.isSuccessful) {
+                emit(Resource.success(response.body()))
+            } else {
+                emit(Resource.error(response.message(), response.body(), response.code()))
             }
-
-            override fun onFailure(call: Call<Playlist>, t: Throwable) {
-            }
-        })
-        return data
-    }
+        }
 }
