@@ -16,7 +16,7 @@ import kg.geektech.youtubeapi.databinding.ActivityPlaylistItemBinding
 import kg.geektech.youtubeapi.ui.activities.video.VideoActivity
 import kg.geektech.youtubeapi.utilities.Constants
 
-class PlaylistItemActivity :
+class ItemPlaylistActivity :
     BaseActivity<ItemPlaylistViewModel, ActivityPlaylistItemBinding>(),
     ItemPlaylistAdapter.OnItemClick {
 
@@ -50,7 +50,7 @@ class PlaylistItemActivity :
                         binding.toolbar.visibility = View.VISIBLE
                         binding.tvCount.visibility = View.VISIBLE
 
-                        binding.tvTitlePlaylist.text =
+                        binding.tvTitle.text =
                             intent.getStringExtra(Constants.KEY_PLAYLIST_TITLE)
 
                         binding.tvDescriptionPlaylist.text =
@@ -77,7 +77,7 @@ class PlaylistItemActivity :
 
     private fun initRecyclerView() {
         binding.rvPlaylistItems.apply {
-            adapter = this@PlaylistItemActivity.adapter
+            adapter = this@ItemPlaylistActivity.adapter
         }
     }
 
@@ -112,9 +112,7 @@ class PlaylistItemActivity :
 
     override fun onClick(item: Item) {
         Intent(this, VideoActivity::class.java).apply {
-            putExtra(Constants.KEY_PLAYLIST_ID, item.id)
-            putExtra(Constants.KEY_PLAYLIST_TITLE, item.snippet?.title)
-            putExtra(Constants.KEY_PLAYLIST_DESC, item.snippet?.description)
+            putExtra(Constants.VIDEO_ID, item.contentDetails?.videoId)
             startActivity(this)
         }
     }

@@ -65,7 +65,12 @@ data class Item(
     val etag: String? = null,
     val id: String? = null,
     val kind: String? = null,
-    val snippet: Snippet? = null
+    val snippet: Snippet? = null,
+    val status: Status? = null
+)
+
+data class Status(
+    val privacyStatus: String? = null
 )
 
 data class High(

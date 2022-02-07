@@ -24,4 +24,12 @@ interface ApiService {
         @Query("maxResults") maxResults: Int,
         @Query("pageToken") pageToken: String?
     ): Response<Playlist>
+
+    @GET("videos")
+    suspend fun getVideos(
+        @Query("part") part: String,
+        @Query("id") videosId: String,
+        @Query("key") key: String
+    ): Response<Playlist>
+
 }

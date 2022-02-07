@@ -9,4 +9,5 @@
     <string name="video">Video</string>
     <string name="download">Download</string>
     <string name="media_url_mp4">https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4</string>
+    <string name="error">Ошибка при возпроизведении...</string>
 </resources>

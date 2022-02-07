@@ -7,25 +7,28 @@ import android.net.Network
 import android.net.NetworkRequest
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.util.Util
 import kg.geektech.youtubeapi.R
 import kg.geektech.youtubeapi.core.base.BaseActivity
-import kg.geektech.youtubeapi.core.base.BaseViewModel
+import kg.geektech.youtubeapi.core.network.Status
 import kg.geektech.youtubeapi.databinding.ActivityVideoBinding
 import kg.geektech.youtubeapi.utilities.Constants
 
 class VideoActivity :
-    BaseActivity<BaseViewModel, ActivityVideoBinding>() {
+    BaseActivity<VideoViewModel, ActivityVideoBinding>() {
 
     private var player: SimpleExoPlayer? = null
     private var playWhenReady = true
     private var currentWindow = 0
     private var playbackPosition = 0L
 
-    override val viewModel: BaseViewModel
-        get() = BaseViewModel()
+    override val viewModel: VideoViewModel by lazy {
+        ViewModelProvider(this)[VideoViewModel::class.java]
+    }
 
     override fun initListener() {
         binding.ivBack.setOnClickListener {
@@ -40,16 +43,18 @@ class VideoActivity :
 
     private fun initializePlayer() {
         player = SimpleExoPlayer.Builder(this).build()
+
             .also { exoPlayer ->
                 binding.videoView.player = exoPlayer
+                exoPlayer.playWhenReady = playWhenReady
+                exoPlayer.seekTo(currentWindow, playbackPosition)
+                exoPlayer.prepare()
             }
             .also { exoPlayer ->
                 val mediaItem = MediaItem.fromUri(getString(R.string.media_url_mp4))
                 exoPlayer.setMediaItem(mediaItem)
+
             }
-        player!!.playWhenReady = playWhenReady
-        player!!.seekTo(currentWindow, playbackPosition)
-        player!!.prepare()
     }
 
     override fun inflateViewBinding(inflater: LayoutInflater): ActivityVideoBinding {
@@ -67,12 +72,6 @@ class VideoActivity :
                         binding.videoView.visibility = View.VISIBLE
                         binding.include.root.visibility = View.GONE
                         binding.toolbar.visibility = View.VISIBLE
-
-                        binding.tvTitlePlaylist.text =
-                            intent.getStringExtra(Constants.KEY_PLAYLIST_TITLE)
-
-                        binding.tvDescriptionVideo.text =
-                            intent.getStringExtra(Constants.KEY_PLAYLIST_DESC)
                     }
                 }
 
@@ -86,6 +85,20 @@ class VideoActivity :
                 }
             }
         )
+    }
+
+    override fun initViewModel() {
+        intent.getStringExtra(Constants.VIDEO_ID)?.let { it ->
+            viewModel.getVideos(it).observe(this) { resource ->
+                if (resource.status == Status.SUCCESS) {
+                    binding.tvTitle.text = resource.data?.items?.get(0)?.snippet?.title
+                    binding.tvDescriptionVideo.text =
+                        resource.data?.items?.get(0)?.snippet?.description
+                } else if (resource.status == Status.ERROR) {
+                    Toast.makeText(this, getString(R.string.error), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     public override fun onStart() {

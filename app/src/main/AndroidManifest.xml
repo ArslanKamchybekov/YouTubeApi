@@ -17,7 +17,7 @@
             android:name=".ui.activities.video.VideoActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.playlistItem.PlaylistItemActivity"
+            android:name=".ui.activities.playlistItem.ItemPlaylistActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.playlist.PlaylistActivity"

@@ -13,7 +13,7 @@ import kg.geektech.youtubeapi.core.base.BaseActivity
 import kg.geektech.youtubeapi.core.network.Status
 import kg.geektech.youtubeapi.data.model.Item
 import kg.geektech.youtubeapi.databinding.ActivityPlaylistBinding
-import kg.geektech.youtubeapi.ui.activities.playlistItem.PlaylistItemActivity
+import kg.geektech.youtubeapi.ui.activities.playlistItem.ItemPlaylistActivity
 import kg.geektech.youtubeapi.utilities.Constants
 
 class PlaylistActivity : BaseActivity<PlaylistViewModel, ActivityPlaylistBinding>(),
@@ -87,7 +87,7 @@ class PlaylistActivity : BaseActivity<PlaylistViewModel, ActivityPlaylistBinding
     }
 
     override fun onClick(item: Item) {
-        Intent(this, PlaylistItemActivity::class.java).apply {
+        Intent(this, ItemPlaylistActivity::class.java).apply {
             putExtra(Constants.KEY_PLAYLIST_ID, item.id)
             putExtra(Constants.KEY_PLAYLIST_TITLE, item.snippet?.title)
             putExtra(Constants.KEY_PLAYLIST_DESC, item.snippet?.description)
